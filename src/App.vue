@@ -1,6 +1,27 @@
-<script setup>
+<script >
+
 import { RouterLink, RouterView } from "vue-router";
 import HelloWorld from "./components/HelloWorld.vue";
+import getCategory from "./serivce/CategoryService";
+
+export default {
+  mounted() {
+    // alert ("hello world")
+    (async () => {
+      const resp = await getCategory();
+      console.log(resp.data);
+    })();
+  },
+  methods: {
+    showNavigateDetail() {
+      alert("hellpo");
+    },
+  },
+};
+
+
+{
+}
 </script>
 
 <template>
@@ -18,7 +39,7 @@ import HelloWorld from "./components/HelloWorld.vue";
           class="w-full h-full border-white border-l-2 flex flex-col justify-center"
         >
           <div
-            class="flex flex-row border-white border-b-2 justify-between w-full"
+            class="flex flex-row border-white border-b-2 justify-between w-full h-1/2"
           >
             <div
               class="text-white pl-10 uppercase flex flex-row justify-between"
@@ -125,18 +146,24 @@ import HelloWorld from "./components/HelloWorld.vue";
               search
             </div>
           </div>
-          <div class="flex flex-row justify-between w-full">
-            <div class="text-white pl-10 uppercase font-semibold text-lg">
-              motorcycle
+          <div class="flex flex-row justify-between w-full h-1/2">
+            <button @click="showNavigateDetail()">
+              <div
+                class="text-white pl-10 uppercase font-semibold text-lg pt-2"
+              >
+                motorcycle
+              </div>
+            </button>
+            <div class="text-white uppercase font-semibold text-lg pt-2">
+              atv
             </div>
-            <div class="text-white uppercase font-semibold text-lg">atv</div>
-            <div class="text-white uppercase font-semibold text-lg">
+            <div class="text-white uppercase font-semibold text-lg pt-2">
               side-by-side
             </div>
-            <div class="text-white uppercase font-semibold text-lg">
+            <div class="text-white uppercase font-semibold text-lg pt-2">
               snow mobile
             </div>
-            <div class="text-white pr-10 uppercase font-semibold text-lg">
+            <div class="text-white pr-10 uppercase font-semibold text-lg pt-2">
               power product
             </div>
           </div>
