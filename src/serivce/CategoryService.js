@@ -1,5 +1,5 @@
 import {Axios} from "./Axios" 
 
 export default function getCategory (){
-    return Axios.get("/category")
+    return Axios.get("/motorcycle-category")
 }

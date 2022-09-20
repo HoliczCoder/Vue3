@@ -1,32 +1,33 @@
-<script >
-
+<script setup>
 import { RouterLink, RouterView } from "vue-router";
 import HelloWorld from "./components/HelloWorld.vue";
 import getCategory from "./serivce/CategoryService";
+import { ref, onMounted } from "vue";
+import HomeViewVue from "./views/HomeView.vue";
 
-export default {
-  mounted() {
-    // alert ("hello world")
-    (async () => {
-      const resp = await getCategory();
-      console.log(resp.data);
-    })();
-  },
-  methods: {
-    showNavigateDetail() {
-      alert("hellpo");
-    },
-  },
+const count = ref(0);
+const showMotorcycleCategory = ref(false);
+const motorcycleCatContent = ref([]);
+onMounted(() => {
+  // alert(`The initial count is ${count.value}.`);
+  (async () => {
+    const resp = await getCategory();
+    console.log(resp.data);
+    motorcycleCatContent.value = resp.data;
+  })();
+});
+const handle = () => {
+  alert(value.value);
 };
 
-
-{
-}
+const showMotorcycleCat = () => {
+  showMotorcycleCategory.value = true;
+};
 </script>
 
 <template>
   <header>
-    <div class="bg-black w-full h-24 flex flex-row justify-center items-center">
+    <div class="bg-black z-50 w-full h-24 flex flex-row justify-center items-center">
       <div
         class="w-3/4 h-3/4 overflow-hidden flex flex-row justify-start align-middle"
       >
@@ -147,7 +148,7 @@ export default {
             </div>
           </div>
           <div class="flex flex-row justify-between w-full h-1/2">
-            <button @click="showNavigateDetail()">
+            <button @click="showMotorcycleCat()">
               <div
                 class="text-white pl-10 uppercase font-semibold text-lg pt-2"
               >
@@ -170,20 +171,109 @@ export default {
         </div>
       </div>
     </div>
-    <!-- <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  </header>
+  <div class="w-full flex flex-row justify-center">
+    <div class="w-3/4 relative">
+      <div class="animation-block w-full overflow-hidden" v-if="showMotorcycleCategory">
+        <div class="pl-7 pr-14 pt-8 pb-5 flex flex-row">
+          <div class="flex-1 ">
+            <div class="list-category h-full">
+              <div class="bg-black mx-5 rounded-md flex justify-center p-1">
+                <div class="text-white uppercase font-bold">
+                  motorcycle home
+                </div>
+              </div>
+              <div class="mt-2 mr-5">
+                <div>
+                  <div
+                    v-for="(item, index) in motorcycleCatContent"
+                    :key="index"
+                  >
+                    <div
+                      class="category-margin bg-blue-800 flex flex-row justify-end rounded-md"
+                    >
+                      <div
+                        class="h-full ml-5 w-full bg-gradient-to-r from-white to-blue-400 rounded-r-md p-1 flex flex-row justify-start"
+                      >
+                        <div><img :src="item.categoryImage"/></div>
+                        <div class="">
+                          {{ item.name }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div>
+                  <div
+                    class="bg-blue-800 category-margin rounded-md flex justify-center p-1"
+                  >
+                    <div class="text-white uppercase font-bold">
+                      motorcycle home
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div
+                    class="bg-blue-800 category-margin rounded-md flex justify-center p-1"
+                  >
+                    <div class="text-white uppercase font-bold">
+                      motorcycle home
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="flex-[4]">
+            <div class="grid grid-cols-4 gap-4">
+              <div class="bg-red-500">01</div>
+              <!-- ... -->
+              <div class="bg-red-500">01</div>
+              <div class="bg-red-500">01</div>
+              <div class="bg-red-500">01</div>
+              <div class="bg-red-500">01</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <body>
+    <div class="w-full h-full bg-red-500">
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
         <RouterLink to="/random">Random</RouterLink>
       </nav>
-    </div> -->
-  </header>
-
-  <!-- <RouterView /> -->
+    </div>
+  </body> -->
+  <!-- <HomeViewVue></HomeViewVue> -->
+  <RouterView />
 </template>
 
 <style scoped>
+.category-margin {
+  margin: 0 0 1px 0;
+}
+.animation-block {
+  position: absolute;
+  top: 0px;
+  background-color: white;
+  animation-name: example;
+  animation-duration: 0.5s;
+  height: auto;
+}
+
+@keyframes example {
+  from {
+    top: -1000px;
+  }
+  to {
+    top: 0px;
+    
+  }
+}
 header {
   line-height: 1.5;
   max-height: 100vh;

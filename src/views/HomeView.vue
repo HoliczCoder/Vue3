@@ -3,7 +3,5 @@ import TheWelcome from "../components/TheWelcome.vue";
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+    <div class="w-full h-screen bg-red-200"></div>  
 </template>
