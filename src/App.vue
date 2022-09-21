@@ -2,12 +2,14 @@
 import { RouterLink, RouterView } from "vue-router";
 import HelloWorld from "./components/HelloWorld.vue";
 import getCategory from "./serivce/CategoryService";
+import getProductByCategoryId from "./serivce/ProductSerivce";
 import { ref, onMounted } from "vue";
 import HomeViewVue from "./views/HomeView.vue";
 
 const count = ref(0);
 const showMotorcycleCategory = ref(false);
 const motorcycleCatContent = ref([]);
+const productList = ref([]);
 onMounted(() => {
   // alert(`The initial count is ${count.value}.`);
   (async () => {
@@ -19,6 +21,13 @@ onMounted(() => {
 const handle = () => {
   alert(value.value);
 };
+const showProductList = (id) => {
+  (async () => {
+    const resp = await getProductByCategoryId(id);
+    console.log(resp.data);
+    productList.value = resp.data;
+  })();
+};
 
 const showMotorcycleCat = () => {
   showMotorcycleCategory.value = true;
@@ -27,7 +36,9 @@ const showMotorcycleCat = () => {
 
 <template>
   <header>
-    <div class="bg-black z-50 w-full h-24 flex flex-row justify-center items-center">
+    <div
+      class="bg-black z-50 w-full h-24 flex flex-row justify-center items-center"
+    >
       <div
         class="w-3/4 h-3/4 overflow-hidden flex flex-row justify-start align-middle"
       >
@@ -174,9 +185,12 @@ const showMotorcycleCat = () => {
   </header>
   <div class="w-full flex flex-row justify-center">
     <div class="w-3/4 relative">
-      <div class="animation-block w-full overflow-hidden" v-if="showMotorcycleCategory">
+      <div
+        class="animation-block w-full overflow-hidden"
+        v-if="showMotorcycleCategory"
+      >
         <div class="pl-7 pr-14 pt-8 pb-5 flex flex-row">
-          <div class="flex-1 ">
+          <div class="flex-1">
             <div class="list-category h-full">
               <div class="bg-black mx-5 rounded-md flex justify-center p-1">
                 <div class="text-white uppercase font-bold">
@@ -192,14 +206,15 @@ const showMotorcycleCat = () => {
                     <div
                       class="category-margin bg-blue-800 flex flex-row justify-end rounded-md"
                     >
-                      <div
+                      <button
+                        @click="showProductList(item.id)"
                         class="h-full ml-5 w-full bg-gradient-to-r from-white to-blue-400 rounded-r-md p-1 flex flex-row justify-start"
                       >
-                        <div><img :src="item.categoryImage"/></div>
+                        <div><img :src="item.categoryImage" /></div>
                         <div class="">
                           {{ item.name }}
                         </div>
-                      </div>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -224,14 +239,29 @@ const showMotorcycleCat = () => {
               </div>
             </div>
           </div>
-          <div class="flex-[4]">
-            <div class="grid grid-cols-4 gap-4">
-              <div class="bg-red-500">01</div>
-              <!-- ... -->
-              <div class="bg-red-500">01</div>
-              <div class="bg-red-500">01</div>
-              <div class="bg-red-500">01</div>
-              <div class="bg-red-500">01</div>
+          <div class="flex-[4] ">
+            <div class="bg-white mx-5 rounded-md flex justify-center p-1 ">
+              <div class="text-white uppercase font-bold">motorcycle home</div>
+            </div>
+            <div class="grid grid-cols-4 gap-4 mt-2 bg-red-500">
+              <div v-for="(item, index) in productList" :key="index">
+                <div
+                  class="category-margin  flex flex-row w-full h-ful justify-end rounded-md"
+                >
+                  <button
+                    @click="showProductList(item.id)"
+                    class="h-full w-ful p-1"
+                  >
+                    <div><img :src="item.coverImage" /></div>
+                    <div class="uppercase font-bold">
+                      {{ item.name }}
+                    </div>
+                    <div class="text-sm">
+                      MSRP {{item.currentOffer}}
+                    </div>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -271,7 +301,6 @@ const showMotorcycleCat = () => {
   }
   to {
     top: 0px;
-    
   }
 }
 header {
